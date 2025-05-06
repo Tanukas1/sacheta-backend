@@ -12,9 +12,10 @@ const sendMail = async (to, subject, html) => {
   });
 
   const mailOptions = {
-    from: '"Sacheta Foundation" <sachetafoundation@gmail.com>',
-    to,
-    subject,
+    from: '"Sacheta Foundation" <8c2a15001@smtp-brevo.com>',
+    to: '"tanukashyap89@gmail.com"',
+    subject: "Test Mail Shoot",
+    text: "This is a test email sent via Node.js",
     html,
   };
 

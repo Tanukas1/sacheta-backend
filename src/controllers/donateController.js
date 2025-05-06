@@ -1,7 +1,6 @@
 const Donation = require('../models/donateModel.js');
 
 async function donateRoutes(req, res) {
- 
   const {
     fullName,
     email,
@@ -44,6 +43,7 @@ async function donateRoutes(req, res) {
     });
 
     console.log("✅ Donation submitted successfully:", donation);
+
     res.status(201).json({
       message: 'Donation received successfully!',
       donation
