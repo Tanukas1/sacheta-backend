@@ -1,37 +1,55 @@
 const Donation = require('../models/donateModel');
-const sendMail = require('../utils/mail');
 
 async function donateRoutes(req, res) {
-  const data = req.body;
+  const {
+    fullName,
+    email,
+    mobileNo,
+    alternateMobileNo,
+    citizenship,
+    donationType,
+    birthdate,
+    receiveCertificate,
+    panNumber,
+    address,
+    pinCode,
+    city,
+    state,
+    preferenceState
+  } = req.body;
+
+  if (!fullName || !email || !mobileNo || !citizenship || !donationType) {
+    return res.status(400).json({ message: 'Please fill all required fields.' });
+  }
 
   try {
-    const donation = new Donation(data); 
-    await donation.save(); 
+    console.log("✅ Donation attempt:", req.body);
 
-    const htmlContent = `
-      <h2>New Donation Form Submission</h2>
-      <p><strong>Name:</strong> ${data.fullName}</p>
-      <p><strong>Email:</strong> ${data.email}</p>
-      <p><strong>Mobile:</strong> ${data.mobileNo}</p>
-      <p><strong>Citizenship:</strong> ${data.citizenship}</p>
-      <p><strong>Donation Type:</strong> ${data.donationType}</p>
-      <p><strong>Birthdate:</strong> ${data.birthdate || 'N/A'}</p>
-      ${data.receiveCertificate ? `
-        <p><strong>PAN Number:</strong> ${data.panNumber}</p>
-        <p><strong>Address:</strong> ${data.address}</p>
-        <p><strong>Pin Code:</strong> ${data.pinCode}</p>
-        <p><strong>City:</strong> ${data.city}</p>
-        <p><strong>State:</strong> ${data.state}</p>
-        <p><strong>Preference State:</strong> ${data.preferenceState}</p>
-      ` : ''}
-    `;
+    const donation = await Donation.create({
+      fullName,
+      email,
+      mobileNo,
+      alternateMobileNo,
+      citizenship,
+      donationType,
+      birthdate,
+      receiveCertificate,
+      panNumber,
+      address,
+      pinCode,
+      city,
+      state,
+      preferenceState
+    });
 
-    await sendMail(data.email, 'Thank You for Donating!', htmlContent);
-
-    res.status(200).json({ message: 'Donation saved and email sent' });
+    console.log("✅ Donation submitted successfully:", donation);
+    res.status(201).json({
+      message: 'Donation received successfully!',
+      donation
+    });
   } catch (error) {
-    console.error('Error processing donation:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error("❌ Error during donation submission:", error.message);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 }
 

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const donationSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
@@ -15,7 +15,7 @@ const donationSchema = new mongoose.Schema({
   city: { type: String },
   state: { type: String },
   preferenceState: { type: String },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Donation', donationSchema);
+module.exports = mongoose.model("Donation", donationSchema);
