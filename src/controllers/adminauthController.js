@@ -31,4 +31,5 @@ async function adminRegister(req, res) {
   }
 }
 
-module.exports = { adminRegister };
+
+module.exports = { adminRegister};

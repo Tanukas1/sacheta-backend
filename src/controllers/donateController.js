@@ -1,6 +1,7 @@
-const Donation = require('../models/donateModel');
+const Donation = require('../models/donateModel.js');
 
 async function donateRoutes(req, res) {
+ 
   const {
     fullName,
     email,
