@@ -1,6 +1,9 @@
-const Donation = require('../models/donateModel.js');
+// controllers/donateController.js
 
-async function donateRoutes(req, res) {
+const Donation = require('../models/donateModel');
+
+// POST: Create a new donation
+async function createDonation(req, res) {
   const {
     fullName,
     email,
@@ -23,8 +26,6 @@ async function donateRoutes(req, res) {
   }
 
   try {
-    console.log("✅ Donation attempt:", req.body);
-
     const donation = await Donation.create({
       fullName,
       email,
@@ -42,16 +43,49 @@ async function donateRoutes(req, res) {
       preferenceState
     });
 
-    console.log("✅ Donation submitted successfully:", donation);
-
     res.status(201).json({
       message: 'Donation received successfully!',
       donation
     });
   } catch (error) {
-    console.error("❌ Error during donation submission:", error.message);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 }
 
-module.exports = { donateRoutes };
+//GET: fetch all donate
+
+async function getDonations(req, res) {
+  try {
+    const donations = await Donation.find();
+    res.json({
+      message: 'Donations retrieved successfully!',
+      donations
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching donations', error });
+  }
+}
+
+// GET: Fetch donation by ID
+async function getDonationById(req, res) {
+  const { id } = req.params;
+  try {
+    const donation = await Donation.findById(id);
+    if (!donation) {
+      return res.status(404).json({ message: 'Donation not found!' });
+    }
+    res.json({
+      message: 'Donation retrieved successfully!',
+      donation
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching donation', error });
+  }
+}
+
+// 👇 All functions exported together
+module.exports = {
+  createDonation,
+  getDonations,
+  getDonationById
+};
